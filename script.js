@@ -23,21 +23,31 @@ function searchGeo() {
       searchOneCall();
     });
 }
-function showResults() {
-  var resultCard = document.createElement("div");
-  resultCard.classList.add("card", "bg-light", "text-dark", "mb-3", "p-3");
+function showResults(data) {
+  for (let i = 0; i < 5; i++) {
+    var resultCard = document.createElement("div");
+    resultCard.classList.add("card", "bg-light", "text-dark", "mb-3", "p-3");
 
-  var resultBody = document.createElement("div");
-  resultBody.classList.add("card-body");
+    var resultBody = document.createElement("div");
+    resultBody.classList.add("card-body");
 
-  var bodyContentEl = document.createElement("p");
-  bodyContentEl.textContent = (lat, lon).current.weather.icon;
+    var icon = document.createElement("img");
+    icon.src =
+      "http://openweathermap.org/img/wn/" +
+      data.daily[i].weather[0].icon +
+      ".png";
 
-  var titleEl = document.createElement("h3");
-  titleEl.textContent = city.name;
-  resultBody.appendChild(titleEl);
-  resultCard.appendChild(resultBody);
-  document.body.appendChild(resultCard);
+    var bodyContentEl = document.createElement("p");
+    bodyContentEl.textContent = data.daily[i].weather[0].description;
+
+    var titleEl = document.createElement("h3");
+    //titleEl.textContent = city.name;
+    resultBody.appendChild(titleEl);
+    resultCard.appendChild(icon);
+    resultCard.appendChild(bodyContentEl);
+    resultCard.appendChild(resultBody);
+    document.body.appendChild(resultCard);
+  }
 }
 function searchOneCall() {
   fetch(
@@ -57,6 +67,6 @@ function searchOneCall() {
     .then(function (data) {
       console.log(data);
 
-      showResults();
+      showResults(data);
     });
 }
