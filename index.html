@@ -12,14 +12,17 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <div class="col-12 col-md-9 flex-column align-center bg-light p-5">
+    <div
+      id="container"
+      class="col-12 col-md-6 flex-column align-center bg-light p-5"
+    >
       <h1 class="text-primary">Search a City to see its Forecast</h1>
 
       <input id="search-input" class="" type="text" placeholder="Search!" />
 
       <button class="btn" id="search-btn">Search</button>
     </div>
-    <div id="five-day"></div>
+    <div id="five-day" class="col-md-6"></div>
   </body>
   <script src="script.js"></script>
 </html>
