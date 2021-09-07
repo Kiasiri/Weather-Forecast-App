@@ -45,22 +45,26 @@ function showResults(data) {
     data.current.temp +
     "°F" +
     ", " +
-    "feels Like " +
+    "Feels like " +
     data.current.feels_like +
     "°F";
-
+  var uvi = document.createElement("p");
+  uvi.textContent = "UVI: " + data.current.uvi;
   var humidity = document.createElement("p");
   humidity.textContent = "Humidity:" + data.current.humidity + "%";
   var currentDate = document.createElement("h3");
   var month = new Date().getMonth();
   var date = new Date().getDate();
   currentDate.textContent = month + "/" + date;
+
   document.body.appendChild(currentCard);
   currentCard.appendChild(currentDate);
   currentCard.appendChild(icon);
   currentCard.appendChild(temprature);
   currentCard.appendChild(windSpeed);
   currentCard.appendChild(humidity);
+  currentCard.appendChild(uvi);
+
   resultBody.appendChild(currentCard);
   document.body.appendChild(currentCard);
 
@@ -91,11 +95,11 @@ function showResults(data) {
 
     var temprature = document.createElement("p");
     temprature.textContent =
-      "Temprature: Max" +
+      "Temprature: Max " +
       data.daily[i].temp.max +
       "°F" +
       ", " +
-      "Min" +
+      "Min " +
       data.daily[i].temp.min +
       "°F";
 
