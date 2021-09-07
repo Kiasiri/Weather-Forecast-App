@@ -2,6 +2,8 @@ var geoCodingUrl = "https://api.openweathermap.org/geo/1.0/direct?q=";
 var oneCall = "https://api.openweathermap.org/data/2.5/onecall?";
 var APIkey = "&appid=847614a96bad4bae8518be6e90117639";
 var exclude = "&exclude=hourly,minutely,alerts";
+var fiveDay = document.getElementById("five-day");
+var container = document.getElementById("container");
 var searchBtn = document.querySelector("#search-btn");
 let lat;
 let lon;
@@ -50,6 +52,14 @@ function showResults(data) {
     "°F";
   var uvi = document.createElement("p");
   uvi.textContent = "UVI: " + data.current.uvi;
+  if (data.current.uvi <= 3) {
+    uvi.classList.add("bg-success");
+  } else if (data.current.uvi >= 3 && data.current.uvi <= 8) {
+    uvi.classList.add("bg-warning");
+  } else if (data.current.uvi >= 8) {
+    uvi.classList.add("bg-danger");
+  }
+
   var humidity = document.createElement("p");
   humidity.textContent = "Humidity:" + data.current.humidity + "%";
   var currentDate = document.createElement("h3");
@@ -66,7 +76,7 @@ function showResults(data) {
   currentCard.appendChild(uvi);
 
   resultBody.appendChild(currentCard);
-  document.body.appendChild(currentCard);
+  container.appendChild(currentCard);
 
   for (let i = 0; i <= 4; i++) {
     var forecastCard = document.createElement("div");
