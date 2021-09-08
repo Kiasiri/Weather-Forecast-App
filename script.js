@@ -7,10 +7,11 @@ var container = document.getElementById("container");
 var currentDay = document.getElementById("current-day");
 var historyBox = document.getElementById("history-box");
 var searchBtn = document.querySelector(".search-btn");
+var historyBtn = document.querySelectorAll(".history-btn");
 let lat;
 let lon;
 var searchInputVal = document.querySelector("#search-input").value;
-let maxStorage = 0;
+let maxStorage = -1;
 searchBtn.addEventListener("click", searchGeo);
 searchBtn.addEventListener("click", loadText);
 function searchGeo() {
@@ -167,7 +168,7 @@ function loadText() {
   searchInputVal = localStorage.getItem(maxStorage);
   maxStorage++;
   history = document.createElement("button");
-  history.textContent = searchInputVal.toString();
+  history.textContent = searchInputVal.toString(); //this shows an error in the console but buttons break if i remove it.
   historyBox.appendChild(history);
   history.classList.add("history-btn");
   history.addEventListener("click", showResults(this));
@@ -175,11 +176,18 @@ function loadText() {
 
 searchBtn.addEventListener("click", function () {
   console.log(maxStorage);
-  if (maxStorage > 1) {
+  if (maxStorage > 0) {
     nuke();
   }
-  console.log("i survived");
   let input = document.getElementById("search-input").value;
-  console.log(input);
   localStorage.setItem(maxStorage, input);
+});
+historyBtn.forEach((historyBtn) => {
+  historyBtn.addEventListener("click", function () {
+    nuke();
+    let input = document.querySelectorAll(".history-btn").textContent;
+    console.log("i ran");
+    console.log(input);
+    searchGeo(input);
+  });
 });
