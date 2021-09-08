@@ -1,14 +1,18 @@
 var geoCodingUrl = "https://api.openweathermap.org/geo/1.0/direct?q=";
 var oneCall = "https://api.openweathermap.org/data/2.5/onecall?";
-var APIkey = "&appid=847614a96bad4bae8518be6e90117639";
+var APIkey = "&appid=2bc1f0b51ed045438d94380043507d78";
 var exclude = "&exclude=hourly,minutely,alerts";
 var fiveDay = document.getElementById("five-day");
 var container = document.getElementById("container");
-var searchBtn = document.querySelector("#search-btn");
+var currentDay = document.getElementById("current-day");
+var historyBox = document.getElementById("history-box");
+var searchBtn = document.querySelector(".search-btn");
 let lat;
 let lon;
-
+var searchInputVal = document.querySelector("#search-input").value;
+let maxStorage = 0;
 searchBtn.addEventListener("click", searchGeo);
+searchBtn.addEventListener("click", loadText);
 function searchGeo() {
   var searchInputVal = document.querySelector("#search-input").value;
   fetch(geoCodingUrl + searchInputVal + ",us" + "&units=imperial" + APIkey)
@@ -26,12 +30,11 @@ function searchGeo() {
 }
 function showResults(data) {
   var currentCard = document.createElement("div");
-  currentCard.classList.add("card", "bg-primary", "text-light", "mb-2", "p-2");
+  currentCard.classList.add("card", "bg-primary", "text-light", "mb-2", "p-1");
 
   var resultBody = document.createElement("div");
   resultBody.classList.add("card-body");
 
-  var date = document.querySelector("#search-input").value;
   var futureDate = document.createElement("h3");
 
   var icon = document.createElement("img");
@@ -43,7 +46,7 @@ function showResults(data) {
 
   var temprature = document.createElement("p");
   temprature.textContent =
-    "Temprature: Max " +
+    "Temprature: " +
     data.current.temp +
     "°F" +
     ", " +
@@ -75,17 +78,18 @@ function showResults(data) {
   currentCard.appendChild(humidity);
   currentCard.appendChild(uvi);
 
-  resultBody.appendChild(currentCard);
-  container.appendChild(currentCard);
+  //resultBody.appendChild(currentCard);
+  currentDay.appendChild(currentCard);
 
   for (let i = 0; i <= 4; i++) {
     var forecastCard = document.createElement("div");
+    forecastCard.id = "forecast" + i;
     forecastCard.classList.add(
       "card",
       "bg-success",
       "text-light",
       "mb-2",
-      "p-2"
+      "p-1"
     );
 
     var resultBody = document.createElement("div");
@@ -123,9 +127,9 @@ function showResults(data) {
     forecastCard.appendChild(temprature);
     forecastCard.appendChild(windSpeed);
     forecastCard.appendChild(humidity);
-    //forecastCard.appendChild(resultBody);
-    resultBody.appendChild(forecastCard);
-    document.body.appendChild(forecastCard);
+    //resultBody.appendChild(forecastCard);
+    //fiveDay.appendChild(resultBody);
+    fiveDay.appendChild(forecastCard);
   }
 }
 function searchOneCall() {
@@ -149,3 +153,33 @@ function searchOneCall() {
       showResults(data);
     });
 }
+
+function nuke() {
+  currentDay.removeChild(currentDay.childNodes[0]);
+  for (let i = 0; i < 5; i++) {
+    console.log(i);
+    fiveDay.removeChild(document.getElementById("forecast" + i));
+  }
+}
+
+function loadText() {
+  let history;
+  searchInputVal = localStorage.getItem(maxStorage);
+  maxStorage++;
+  history = document.createElement("button");
+  history.textContent = searchInputVal.toString();
+  historyBox.appendChild(history);
+  history.classList.add("history-btn");
+  history.addEventListener("click", showResults(this));
+}
+
+searchBtn.addEventListener("click", function () {
+  console.log(maxStorage);
+  if (maxStorage > 1) {
+    nuke();
+  }
+  console.log("i survived");
+  let input = document.getElementById("search-input").value;
+  console.log(input);
+  localStorage.setItem(maxStorage, input);
+});

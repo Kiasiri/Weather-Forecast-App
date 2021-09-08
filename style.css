@@ -1,3 +1,15 @@
 img {
   width: 50px;
 }
+html,
+body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  min-height: 100%;
+}
+.card-body {
+  padding: 0;
+  flex: auto;
+  flex-wrap: wrap;
+}
