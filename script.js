@@ -7,26 +7,24 @@ var container = document.getElementById("container");
 var currentDay = document.getElementById("current-day");
 var historyBox = document.getElementById("history-box");
 var searchBtn = document.querySelector(".search-btn");
-var historyBtn = document.querySelectorAll(".history-btn");
-let lat;
-let lon;
+var hasSearched = false;
 var searchInputVal = document.querySelector("#search-input").value;
-let maxStorage = -1;
-searchBtn.addEventListener("click", searchGeo);
-searchBtn.addEventListener("click", loadText);
-function searchGeo() {
-  var searchInputVal = document.querySelector("#search-input").value;
+let maxStorage = 0;
+searchBtn.addEventListener("click", searchBtnCallBack);
+
+//takes input from search input from search-input an enters it into the geocodingAPI url
+//gets lat and lon and feeds that to search one call
+function searchGeo(searchInputVal) {
   fetch(geoCodingUrl + searchInputVal + ",us" + "&units=imperial" + APIkey)
     .then((response) => {
       return response.json();
     })
     .then(function (data) {
       console.log(data);
-      lat = data[0].lat;
-      lon = data[0].lon;
+      let lat = data[0].lat;
+      let lon = data[0].lon;
       console.log(lat, lon);
-
-      searchOneCall();
+      searchOneCall(lat, lon);
     });
 }
 function showResults(data) {
@@ -78,8 +76,6 @@ function showResults(data) {
   currentCard.appendChild(windSpeed);
   currentCard.appendChild(humidity);
   currentCard.appendChild(uvi);
-
-  //resultBody.appendChild(currentCard);
   currentDay.appendChild(currentCard);
 
   for (let i = 0; i <= 4; i++) {
@@ -128,12 +124,11 @@ function showResults(data) {
     forecastCard.appendChild(temprature);
     forecastCard.appendChild(windSpeed);
     forecastCard.appendChild(humidity);
-    //resultBody.appendChild(forecastCard);
-    //fiveDay.appendChild(resultBody);
     fiveDay.appendChild(forecastCard);
   }
 }
-function searchOneCall() {
+//takes at and long a puts that into the onecall url and feeds the city name into show results
+function searchOneCall(lat, lon) {
   fetch(
     oneCall +
       "lat=" +
@@ -150,44 +145,63 @@ function searchOneCall() {
     })
     .then(function (data) {
       console.log(data);
-
       showResults(data);
     });
 }
-
+//clears previously displayed weather cards or "nukes" them by removing child nodes
 function nuke() {
   currentDay.removeChild(currentDay.childNodes[0]);
   for (let i = 0; i < 5; i++) {
-    console.log(i);
     fiveDay.removeChild(document.getElementById("forecast" + i));
   }
 }
-
-function loadText() {
-  let history;
-  searchInputVal = localStorage.getItem(maxStorage);
+//creates search history buttons with search history input as its text and value.
+//adds history-btn class to each of those buttons
+//adds an event listener to each of the created buttons and checks if there is any search history if there is any nuke it
+//sets has searched to true so that code knows that searches have been done.
+//then passes buttun value into seaarch geo
+function createHistoryBtn(searchInputVal) {
   maxStorage++;
-  history = document.createElement("button");
-  history.textContent = searchInputVal.toString(); //this shows an error in the console but buttons break if i remove it.
+  let history = document.createElement("button");
+  history.textContent = searchInputVal;
+  history.value = searchInputVal;
   historyBox.appendChild(history);
   history.classList.add("history-btn");
-  history.addEventListener("click", showResults(this));
+  history.addEventListener("click", function (event) {
+    var btnValue = event.target.value;
+    if (hasSearched) {
+      nuke();
+    }
+    hasSearched = true;
+    searchGeo(btnValue);
+  });
 }
 
-searchBtn.addEventListener("click", function () {
-  console.log(maxStorage);
-  if (maxStorage > 0) {
+//gets info from local storage and recreates buttons with their textContent and value
+//loops through local storage creating buttons with values from localstorage
+function loadLocalStorage() {
+  var storageLength = Object.keys(localStorage).length;
+  if (storageLength > 0) {
+    maxStorage = storageLength + 1;
+    for (var i = 0; i < storageLength; i++) {
+      var btnValue = localStorage.getItem(i);
+      createHistoryBtn(btnValue);
+    }
+  }
+}
+//creates search history button and nukes previous cards
+//sets search input into local storage
+//creates historyBtn
+//and searchs geo
+function searchBtnCallBack() {
+  if (hasSearched) {
     nuke();
   }
   let input = document.getElementById("search-input").value;
   localStorage.setItem(maxStorage, input);
-});
-historyBtn.forEach((historyBtn) => {
-  historyBtn.addEventListener("click", function () {
-    nuke();
-    let input = document.querySelectorAll(".history-btn").textContent;
-    console.log("i ran");
-    console.log(input);
-    searchGeo(input);
-  });
-});
+  var search = document.querySelector("#search-input").value;
+  searchGeo(search);
+  createHistoryBtn(search);
+  hasSearched = true;
+}
+loadLocalStorage();
