@@ -11,3 +11,4 @@ gets info from local storage and recreates buttons with their textContent and va
 loops through local storage creating buttons with values from localstorage
 creates search history button and nukes previous cards
 sets search input into local storage creates historyBtn and searchsgeo with its value
+https://kiasiri.github.io/Weather-Forecast-App/
