@@ -5,7 +5,7 @@
 
 ## Description
 
-A user can enter a city and state in the USA and are given a weeks forecast for that city.
+A user can enter a city and state in the USA and are given a weeks forecast for that city. The application will keep track of previous searchs and add them to a search history for the user.
 
 ## Table of Contents
 
