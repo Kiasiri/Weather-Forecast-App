@@ -1,14 +1,38 @@
 # Weather-Forecast-App
 <img src="Weather.PNG" width="300">
-first my app takes input from search input from search-input an enters it into the geocodingAPI url
-this gets lat and lon and feeds that to search onecall().
-takes lat and long a puts that into the onecall url and feeds the city name into show results
-Show results gets the data and creates cards for the different data and gets data from onecall.
-it populates cards with data and styles uvi according to its level.
-clears previously displayed weather cards or "nukes" them by removing child nodes
-creates search history buttons with search history input as its text and value.
-gets info from local storage and recreates buttons with their textContent and value
-loops through local storage creating buttons with values from localstorage
-creates search history button and nukes previous cards
-sets search input into local storage creates historyBtn and searchsgeo with its value
-https://kiasiri.github.io/Weather-Forecast-App/
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+## Description
+
+A user can enter a city and state in the USA and are given a weeks forecast for that city.
+
+## Table of Contents
+
+- [Usage](#usage)
+- [Installation](#installation)
+- [Tests](#tests)
+- [License](#license)
+- [Questions](#questions)
+
+
+
+## Usage
+
+Enter a a city name and state initials to recieve a forecast for that city
+
+## License
+
+This project is covered under the MIT license.
+
+
+## Deployed app
+[Weather Forecast](https://kiasiri.github.io/Weather-Forecast-App/)
+
+
+## Questions
+
+You can contact me at:
+--[Kiasiri](https://github.com/Kiasiri)
+--Email: matthewwiessing@yahoo.com
+
